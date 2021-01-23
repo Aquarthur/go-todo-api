@@ -1,0 +1,19 @@
+# Code editors
+.vscode/
+
+# Binaries from programs & plugins
+main
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Test coverage
+*.out
+
+# Mac OS
+*.DS_Store
