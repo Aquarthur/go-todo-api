@@ -1,9 +1,6 @@
 SHELL := /bin/bash
 
-TARGET_CMD := "main"
-TARGET := ./cmd/$(TARGET_CMD)
-
-COVERAGE_OUT := "$(TARGET_CMD)-coverage.out"
+COVERAGE_OUT := "test-coverage.out"
 EXECUTABLE_NAME := "main"
 
 .PHONY: all build run clean nistall uninstall fmt vet lint test
@@ -13,15 +10,15 @@ all: fmt vet lint test run
 build:
 	@echo "Cleaning dependencies..."
 	@go mod tidy
-	@go build -o $(EXECUTABLE_NAME) $(TARGET)
+	@go build -o $(EXECUTABLE_NAME) .
 
 run: build
 	@echo ""
-	@echo "Starting $(TARGET_CMD)..."
+	@echo "Starting $(EXECUTABLE_NAME)..."
 	@./$(EXECUTABLE_NAME)
 
 clean:
-	@rm -f $(TARGET_CMD)
+	@rm -f $(EXECUTABLE_NAME)
 	@rm -f $(COVERAGE_OUT)
 
 fmt:
