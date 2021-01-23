@@ -27,14 +27,19 @@ func (todoHandler *TodoHandler) FindAll(w http.ResponseWriter, req *http.Request
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	todosBytes, err := json.Marshal(todos)
+	dtos := make([]*models.TodoDTO, 0, len(todos))
+	for _, todo := range todos {
+		dtos = append(dtos, todo.ToDTO())
+	}
+
+	responseBody, err := json.Marshal(dtos)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
 	w.Header().Add("Content-Type", "application/json")
-	w.Write(todosBytes)
 	w.WriteHeader(http.StatusOK)
+	w.Write(responseBody)
 }
 
 func (todoHandler *TodoHandler) Create(w http.ResponseWriter, req *http.Request) {
@@ -52,12 +57,12 @@ func (todoHandler *TodoHandler) Create(w http.ResponseWriter, req *http.Request)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	todoBytes, err := json.Marshal(todo)
+	responseBody, err := json.Marshal(todo.ToDTO())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
 	w.Header().Add("Content-Type", "application/json")
-	w.Write(todoBytes)
 	w.WriteHeader(http.StatusCreated)
+	w.Write(responseBody)
 }

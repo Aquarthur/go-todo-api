@@ -15,7 +15,9 @@ type TodoRepository interface {
 }
 
 func NewTodoRepository() TodoRepository {
-	return &InMemoryTodoRepository{}
+	return &InMemoryTodoRepository{
+		todos: make(map[string]*domain.Todo),
+	}
 }
 
 type InMemoryTodoRepository struct {
@@ -30,7 +32,7 @@ func (repo *InMemoryTodoRepository) FindTodoByID(id string) (*domain.Todo, error
 }
 
 func (repo *InMemoryTodoRepository) FindAllTodos() ([]*domain.Todo, error) {
-	todos := make([]*domain.Todo, len(repo.todos))
+	todos := make([]*domain.Todo, 0, len(repo.todos))
 	for _, val := range repo.todos {
 		todos = append(todos, val)
 	}
