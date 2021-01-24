@@ -1,0 +1,8 @@
+version: "3"
+services:
+  todo-api:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/home/app
