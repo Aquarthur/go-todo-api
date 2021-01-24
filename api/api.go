@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/Aquarthur/go-todo-api/handlers"
+	"github.com/Aquarthur/go-todo-api/middleware"
 	"github.com/Aquarthur/go-todo-api/repository"
 )
 
@@ -16,12 +17,12 @@ func NewTodoAPI() *TodoAPI {
 	hello := func(w http.ResponseWriter, req *http.Request) {
 		w.Write([]byte("Hello there!"))
 	}
-	mux.Handle("/hello", http.HandlerFunc(hello))
+	mux.Handle("/hello", middleware.Log(http.HandlerFunc(hello)))
 
 	todoRepository := repository.NewTodoRepository()
 	todoHandler := handlers.NewTodoHandler(todoRepository)
 
-	mux.Handle("/todo", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux.Handle("/todo", middleware.Log(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			todoHandler.FindAll(w, r)
@@ -31,7 +32,7 @@ func NewTodoAPI() *TodoAPI {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			w.Write([]byte("Method not allowed"))
 		}
-	}))
+	})))
 
 	return &TodoAPI{
 		mux: mux,
