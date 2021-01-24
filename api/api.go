@@ -14,7 +14,7 @@ type TodoAPI struct {
 func NewTodoAPI() *TodoAPI {
 	mux := http.NewServeMux()
 	hello := func(w http.ResponseWriter, req *http.Request) {
-		w.Write([]byte("Hullo there!"))
+		w.Write([]byte("Hello there!"))
 	}
 	mux.Handle("/hello", http.HandlerFunc(hello))
 
