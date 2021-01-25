@@ -11,7 +11,7 @@ type TodoRepository interface {
 	FindAllTodos() ([]*domain.Todo, error)
 	SaveTodo(todo *domain.Todo) error
 	DeleteTodo(id string) error
-	UpdateTodo(todo *domain.Todo) error
+	UpdateTodo(id string, todo *domain.Todo) error
 }
 
 func NewTodoRepository() TodoRepository {
@@ -55,7 +55,14 @@ func (repo *InMemoryTodoRepository) DeleteTodo(id string) error {
 	return fmt.Errorf("could not find todo with id %s", id)
 }
 
-func (repo *InMemoryTodoRepository) UpdateTodo(todo *domain.Todo) error {
-	repo.todos[todo.ID] = todo
-	return nil
+func (repo *InMemoryTodoRepository) UpdateTodo(id string, todo *domain.Todo) error {
+	if _, ok := repo.todos[id]; ok {
+		repo.todos[id] = &domain.Todo{
+			ID:        id,
+			Task:      todo.Task,
+			Completed: todo.Completed,
+		}
+		return nil
+	}
+	return fmt.Errorf("could not find todo with id %s", id)
 }
