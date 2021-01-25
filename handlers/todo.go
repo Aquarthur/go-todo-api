@@ -64,13 +64,13 @@ func (handler *TodoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (todoHandler *TodoHandler) Find(id string, w http.ResponseWriter) {
 	todo, err := todoHandler.repository.FindTodoByID(id)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleError(err, w)
 		return
 	}
 
 	responseBody, err := json.Marshal(todo.ToDTO())
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleError(err, w)
 		return
 	}
 
@@ -82,7 +82,7 @@ func (todoHandler *TodoHandler) Find(id string, w http.ResponseWriter) {
 func (todoHandler *TodoHandler) FindAll(w http.ResponseWriter) {
 	todos, err := todoHandler.repository.FindAllTodos()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleError(err, w)
 		return
 	}
 
@@ -93,7 +93,7 @@ func (todoHandler *TodoHandler) FindAll(w http.ResponseWriter) {
 
 	responseBody, err := json.Marshal(dtos)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleError(err, w)
 		return
 	}
 
@@ -108,13 +108,13 @@ func (todoHandler *TodoHandler) Create(w http.ResponseWriter, payload *models.To
 
 	err := todoHandler.repository.SaveTodo(todo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleError(err, w)
 		return
 	}
 
 	responseBody, err := json.Marshal(todo.ToDTO())
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleError(err, w)
 		return
 	}
 
@@ -129,13 +129,13 @@ func (todoHandler *TodoHandler) Update(id string, w http.ResponseWriter, payload
 
 	err := todoHandler.repository.UpdateTodo(id, todo)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleError(err, w)
 		return
 	}
 
 	responseBody, err := json.Marshal(todo.ToDTO())
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		handleError(err, w)
 		return
 	}
 

@@ -28,7 +28,7 @@ func (repo *InMemoryTodoRepository) FindTodoByID(id string) (*domain.Todo, error
 	if todo, ok := repo.todos[id]; ok {
 		return todo, nil
 	}
-	return nil, fmt.Errorf("could not find todo with id %s", id)
+	return nil, fmt.Errorf("could not fetch todo %s: %w", id, domain.ErrNotFound)
 }
 
 func (repo *InMemoryTodoRepository) FindAllTodos() ([]*domain.Todo, error) {
@@ -41,7 +41,7 @@ func (repo *InMemoryTodoRepository) FindAllTodos() ([]*domain.Todo, error) {
 
 func (repo *InMemoryTodoRepository) SaveTodo(todo *domain.Todo) error {
 	if _, ok := repo.todos[todo.ID]; ok {
-		return fmt.Errorf("todo with id %s already exists", todo.ID)
+		return fmt.Errorf("could not save todo %s: %w", todo.ID, domain.ErrConflict)
 	}
 	repo.todos[todo.ID] = todo
 	return nil
@@ -52,7 +52,7 @@ func (repo *InMemoryTodoRepository) DeleteTodo(id string) error {
 		delete(repo.todos, id)
 		return nil
 	}
-	return fmt.Errorf("could not find todo with id %s", id)
+	return fmt.Errorf("could not delete todo %s: %w", id, domain.ErrNotFound)
 }
 
 func (repo *InMemoryTodoRepository) UpdateTodo(id string, todo *domain.Todo) error {
@@ -64,5 +64,5 @@ func (repo *InMemoryTodoRepository) UpdateTodo(id string, todo *domain.Todo) err
 		}
 		return nil
 	}
-	return fmt.Errorf("could not find todo with id %s", id)
+	return fmt.Errorf("could not update todo %s: %w", id, domain.ErrNotFound)
 }
