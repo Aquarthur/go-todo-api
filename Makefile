@@ -26,11 +26,11 @@ fmt:
 	@go fmt $$(go list ./... | grep -v ./vendor/)
 
 vet:
-	@echo "Running go fmt..."
+	@echo "Running go vet..."
 	@go vet $$(go list ./... | grep -v ./vendor/)
 
 lint:
-	@echo "Running go fmt..."
+	@echo "Running golint..."
 	@golint $$(go list ./... | grep -v ./vendor/)
 
 test:
