@@ -41,6 +41,8 @@ func (handler *TodoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
 			handler.Update(todoID, w, payload)
+		case http.MethodDelete:
+			handler.Delete(todoID, w)
 		default:
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		}
@@ -124,8 +126,11 @@ func (todoHandler *TodoHandler) Create(w http.ResponseWriter, payload *models.To
 }
 
 func (todoHandler *TodoHandler) Update(id string, w http.ResponseWriter, payload *models.TodoDTO) {
-	todo := new(domain.Todo)
-	todo.FromDTO(payload)
+	todo := &domain.Todo{
+		ID:        id,
+		Task:      payload.Task,
+		Completed: payload.Completed,
+	}
 
 	err := todoHandler.repository.UpdateTodo(id, todo)
 	if err != nil {
@@ -142,4 +147,14 @@ func (todoHandler *TodoHandler) Update(id string, w http.ResponseWriter, payload
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(responseBody)
+}
+
+func (todoHandler *TodoHandler) Delete(id string, w http.ResponseWriter) {
+	err := todoHandler.repository.DeleteTodo(id)
+	if err != nil {
+		handleError(err, w)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
 }
