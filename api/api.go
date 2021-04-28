@@ -22,7 +22,6 @@ func NewTodoAPI() *TodoAPI {
 }
 
 func (api *TodoAPI) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-
 	var head string
 	head, req.URL.Path = utils.SplitPath(req.URL.Path)
 	switch head {
@@ -31,7 +30,7 @@ func (api *TodoAPI) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			w.Write([]byte("Hello there!"))
 		}
 		http.HandlerFunc(hello).ServeHTTP(w, req)
-	case "todo":
+	case "todos":
 		api.todoHandler.ServeHTTP(w, req)
 	default:
 		http.NotFound(w, req)
