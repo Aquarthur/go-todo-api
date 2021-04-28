@@ -1,6 +1,6 @@
 module github.com/Aquarthur/go-todo-api
 
-go 1.15
+go 1.16
 
 require (
 	github.com/satori/go.uuid v1.2.0

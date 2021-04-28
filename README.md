@@ -1,6 +1,6 @@
 # TODO API
 
-A basic CRUD API using Go for practice. Start the API by running:
+A basic CRUD API using Go for practice. I have intentionally used the `net/http` library for everything I could. Start the API by running:
 
 ```sh
 ❯ docker-compose up
