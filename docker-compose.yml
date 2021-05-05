@@ -1,8 +1,23 @@
 version: "3"
 services:
+  postgres:
+    image: "postgres:13"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=go-todo-api
   todo-api:
     build: .
     ports:
-      - "8080:8080"
+      - 8080:8080
     volumes:
       - .:/home/app
+    depends_on:
+      - postgres
+    command: >
+      /bin/bash -c "
+        ./artifacts/wait-for-it.sh postgres:5432 -- \
+        air
+      "
