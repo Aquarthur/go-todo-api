@@ -1,8 +1,10 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/Aquarthur/go-todo-api/config"
 	"github.com/Aquarthur/go-todo-api/utils"
 
 	"github.com/Aquarthur/go-todo-api/handlers"
@@ -10,26 +12,29 @@ import (
 )
 
 type TodoAPI struct {
-	todoHandler *handlers.TodoHandler
+	healthHandler *handlers.HealthHandler
+	todoHandler   *handlers.TodoHandler
+	config        *config.ServerConfig
 }
 
-func NewTodoAPI() *TodoAPI {
-	todoRepository := repository.NewTodoRepository()
+func NewTodoAPI(config *config.Config) *TodoAPI {
+	healthHandler := handlers.NewHealthHandler()
+	todoRepository := repository.NewTodoRepository(config.Postgres)
 	todoHandler := handlers.NewTodoHandler(todoRepository)
 	return &TodoAPI{
-		todoHandler: todoHandler,
+		healthHandler: healthHandler,
+		todoHandler:   todoHandler,
+		config:        config.Server,
 	}
 }
 
 func (api *TodoAPI) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	var head string
 	head, req.URL.Path = utils.SplitPath(req.URL.Path)
+	healthPath, _ := utils.SplitPath(api.config.Health)
 	switch head {
-	case "hello":
-		hello := func(w http.ResponseWriter, req *http.Request) {
-			w.Write([]byte("Hello there!"))
-		}
-		http.HandlerFunc(hello).ServeHTTP(w, req)
+	case healthPath:
+		api.healthHandler.ServeHTTP(w, req)
 	case "todos":
 		api.todoHandler.ServeHTTP(w, req)
 	default:
@@ -38,5 +43,5 @@ func (api *TodoAPI) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 }
 
 func (api *TodoAPI) Start() {
-	http.ListenAndServe(":8080", api)
+	http.ListenAndServe(fmt.Sprintf(":%d", api.config.Port), api)
 }

@@ -3,6 +3,7 @@ package repository
 import (
 	"fmt"
 
+	"github.com/Aquarthur/go-todo-api/config"
 	"github.com/Aquarthur/go-todo-api/domain"
 )
 
@@ -14,7 +15,7 @@ type TodoRepository interface {
 	UpdateTodo(id string, todo *domain.Todo) error
 }
 
-func NewTodoRepository() TodoRepository {
+func NewTodoRepository(config *config.PostgresConfig) TodoRepository {
 	return &InMemoryTodoRepository{
 		todos: make(map[string]*domain.Todo),
 	}

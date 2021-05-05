@@ -1,0 +1,9 @@
+server:
+  port: 8080
+  health: '/health'
+postgres:
+  host: 'postgres'
+  port: 5432
+  database: 'go-todo-api'
+  username: 'dev'
+  password: 'pwd'

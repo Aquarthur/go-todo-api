@@ -3,7 +3,7 @@
 A basic CRUD API using Go for practice. I have intentionally used the `net/http` library for everything I could. Start the API by running:
 
 ```sh
-❯ docker-compose up
+❯ docker compose up
 ```
 
 Will fill out the README as I go. For now, everything is in-memory.
