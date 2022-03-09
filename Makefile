@@ -1,11 +1,17 @@
 SHELL := /bin/bash
 
+OUT_DIR := "./tmp"
 COVERAGE_OUT := "test-coverage.out"
-EXECUTABLE_NAME := "main"
+EXECUTABLE_NAME := "$(OUT_DIR)/main"
 
-.PHONY: all build run clean nistall uninstall fmt vet lint test
+.PHONY: all tidy build run clean nistall uninstall fmt vet test
 
-all: fmt vet lint test run
+all: tidy fmt vet test run
+
+tidy:
+	@echo ""
+	@echo "Cleaning dependencies..."
+	@go mod tidy
 
 build:
 	@echo "Cleaning dependencies..."
@@ -28,10 +34,6 @@ fmt:
 vet:
 	@echo "Running go vet..."
 	@go vet $$(go list ./... | grep -v ./vendor/)
-
-lint:
-	@echo "Running golint..."
-	@golint $$(go list ./... | grep -v ./vendor/)
 
 test:
 	@echo "Running tests..."

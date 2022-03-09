@@ -17,8 +17,8 @@ type PostgresConfig struct {
 }
 
 type Config struct {
-	Server   *ServerConfig
-	Postgres *PostgresConfig
+	Server   *ServerConfig   `yaml:"server"`
+	Postgres *PostgresConfig `yaml:"db"`
 }
 
 func NewConfig() (*Config, error) {

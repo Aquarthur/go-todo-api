@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Aquarthur/go-todo-api/domain"
-	"github.com/Aquarthur/go-todo-api/utils"
+	"github.com/Aquarthur/go-todo-api/util"
 
 	"github.com/Aquarthur/go-todo-api/handlers/models"
 
@@ -24,7 +24,7 @@ func NewTodoHandler(todoRepository repository.TodoRepository) *TodoHandler {
 
 func (handler *TodoHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var todoID string
-	todoID, r.URL.Path = utils.SplitPath(r.URL.Path)
+	todoID, r.URL.Path = util.SplitPath(r.URL.Path)
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return

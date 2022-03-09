@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Aquarthur/go-todo-api/config"
-	"github.com/Aquarthur/go-todo-api/utils"
+	"github.com/Aquarthur/go-todo-api/util"
 
 	"github.com/Aquarthur/go-todo-api/handlers"
 	"github.com/Aquarthur/go-todo-api/repository"
@@ -30,8 +30,8 @@ func NewTodoAPI(config *config.Config) *TodoAPI {
 
 func (api *TodoAPI) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	var head string
-	head, req.URL.Path = utils.SplitPath(req.URL.Path)
-	healthPath, _ := utils.SplitPath(api.config.Health)
+	head, req.URL.Path = util.SplitPath(req.URL.Path)
+	healthPath, _ := util.SplitPath(api.config.Health)
 	switch head {
 	case healthPath:
 		api.healthHandler.ServeHTTP(w, req)
